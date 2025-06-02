@@ -1,17 +1,82 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Verviction Prompt Generator</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ICD Prompt Generator Verifikator Deny Assistant - Alat bantu profesional untuk memverifikasi dan menghasilkan kode ICD-10 sesuai deskripsi klinis.">
+  <meta name="keywords" content="ICD-10, ICD-9-CM, AI, pengkodean klinis, verifikasi klaim, BPJS Kesehatan, Verifikator Deny">
+  <meta name="author" content="Verifikator Deny Assistant">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="ICD Prompt Generator - Verifikator Deny">
+  <meta property="og:description" content="Alat bantu profesional untuk memverifikasi dan menghasilkan kode ICD-10 sesuai deskripsi klinis.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://denysankara.github.io/verifikator-icd/">
+  <title>ICD Prompt Generator - Verifikator Deny</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 2rem;
+      background-color: #f8f8f8;
+    }
+    textarea {
+      width: 90%;
+      max-width: 500px;
+      height: 100px;
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+    button {
+      margin-top: 1rem;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #output {
+      margin-top: 2rem;
+      white-space: pre-line;
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 1rem;
+      width: 90%;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  </style>
 </head>
 <body>
-  <h1>Prompt Generator</h1>
-  <textarea id="input" placeholder="Masukkan topik..."></textarea>
+  <h1>ICD Prompt Generator - Verifikator Deny</h1>
+  <p>Masukkan deskripsi gejala, diagnosis, atau prosedur medis, lalu gunakan prompt yang dihasilkan untuk memverifikasi kode ICD-10 sesuai dengan standar BPJS Kesehatan.</p>
+  <textarea id="input" placeholder="Contoh: pasien mengalami nyeri dada kiri menjalar ke lengan kiri disertai sesak napas"></textarea>
+  <br>
   <button onclick="generatePrompt()">Buat Prompt</button>
-  <p id="output"></p>
+  <button onclick="copyPrompt()">Salin Prompt</button>
+  <div id="output"></div>
 
-  <script src="script.js"></script>
+  <script>
+    function generatePrompt() {
+      const input = document.getElementById("input").value;
+      const output = document.getElementById("output");
+
+      if (input.trim() === "") {
+        output.innerText = "Silakan masukkan deskripsi klinis terlebih dahulu.";
+        return;
+      }
+
+      const prompt = `Saya ingin Anda bertindak sebagai Verifikator Deny Assistant, seorang ahli pengkodean klinis berdasarkan ICD-10 versi 2010. Saya akan memberikan deskripsi kondisi medis, dan Anda akan memberikan maksimal 3 saran kode ICD-10 yang paling relevan beserta nama diagnosis resmi sesuai referensi ICD-10, Panduan Verifikasi Klaim INA-CBG Edisi 2, dan PNPK jika relevan. Verifikasi bahwa pengkodean tersebut logis dan dapat dipertanggungjawabkan untuk proses klaim BPJS Kesehatan.\n\nDeskripsi klinis: ${input}`;
+      output.innerText = prompt;
+    }
+
+    function copyPrompt() {
+      const output = document.getElementById("output").innerText;
+      if (output.trim() !== "") {
+        navigator.clipboard.writeText(output);
+        alert("Prompt berhasil disalin!");
+      }
+    }
+  </script>
 </body>
 </html>
