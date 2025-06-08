@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -7,13 +6,7 @@
   <meta name="description" content="ICD Prompt Generator Verifikator Deny Assistant - Alat bantu profesional untuk memverifikasi dan menghasilkan kode ICD-10 sesuai deskripsi klinis.">
   <meta name="keywords" content="ICD-10, ICD-9-CM, AI, pengkodean klinis, verifikasi klaim, BPJS Kesehatan, Verifikator Deny">
   <meta name="author" content="Verifikator Deny Assistant">
-  <meta name="robots" content="index, follow">
-  <meta property="og:title" content="ICD Prompt Generator - Verifikator Deny">
-  <meta property="og:description" content="Alat bantu profesional untuk memverifikasi dan menghasilkan kode ICD-10 sesuai deskripsi klinis.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://denysankara.github.io/verifikator-icd/">
   <title>ICD Prompt Generator - Verifikator Deny</title>
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
   <style>
     body {
       font-family: sans-serif;
@@ -29,12 +22,12 @@
       margin-top: 1rem;
     }
     button {
-      margin-top: 1rem;
+      margin: 0.5rem;
       padding: 10px 20px;
       font-size: 16px;
       cursor: pointer;
     }
-    #output {
+    #output, #hasilICD {
       margin-top: 2rem;
       white-space: pre-line;
       background: #fff;
@@ -49,19 +42,25 @@
 </head>
 <body>
   <h1>ICD Prompt Generator - Verifikator Deny</h1>
-  <p>Masukkan deskripsi gejala, diagnosis, atau prosedur medis, lalu gunakan prompt yang dihasilkan untuk memverifikasi kode ICD-10 sesuai dengan standar BPJS Kesehatan.</p>
+  <p>Masukkan deskripsi gejala, diagnosis, atau prosedur medis.</p>
+  
   <textarea id="input" placeholder="Contoh: pasien mengalami nyeri dada kiri menjalar ke lengan kiri disertai sesak napas"></textarea>
   <br>
+
   <button onclick="generatePrompt()">Buat Prompt</button>
   <button onclick="copyPrompt()">Salin Prompt</button>
+  <button onclick="searchICD()">Cari ICD-10</button>
+
   <div id="output"></div>
+  <div id="hasilICD"></div>
 
   <script>
-    function generatePrompt() {
-      const input = document.getElementById("input").value;
-      const output = document.getElementById("output");
+    const apiUrl = "https://script.google.com/macros/s/AKfycbyJCbX1CVaU8990KnD7PWPXd9F0-FO34kuIyLAX2MCuxV3ro66rPuxKpm0tsFGTnIhS/exec";
 
-      if (input.trim() === "") {
+    function generatePrompt() {
+      const input = document.getElementById("input").value.trim();
+      const output = document.getElementById("output");
+      if (!input) {
         output.innerText = "Silakan masukkan deskripsi klinis terlebih dahulu.";
         return;
       }
@@ -71,10 +70,37 @@
     }
 
     function copyPrompt() {
-      const output = document.getElementById("output").innerText;
-      if (output.trim() !== "") {
-        navigator.clipboard.writeText(output);
+      const outputText = document.getElementById("output").innerText;
+      if (outputText.trim() !== "") {
+        navigator.clipboard.writeText(outputText);
         alert("Prompt berhasil disalin!");
+      }
+    }
+
+    async function searchICD() {
+      const input = document.getElementById("input").value.trim();
+      const hasilBox = document.getElementById("hasilICD");
+      hasilBox.innerHTML = "";
+
+      if (!input) {
+        hasilBox.innerText = "Silakan masukkan deskripsi terlebih dahulu.";
+        return;
+      }
+
+      const url = `${apiUrl}?term=${encodeURIComponent(input)}&type=icd10`;
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+
+        if (data.results.length === 0) {
+          hasilBox.innerText = "Tidak ditemukan hasil ICD-10 yang cocok.";
+        } else {
+          const list = data.results.map(item => `✅ ${item.code} - ${item.name}`);
+          hasilBox.innerText = list.join("\n");
+        }
+      } catch (err) {
+        hasilBox.innerText = "Terjadi kesalahan saat menghubungi API.";
+        console.error(err);
       }
     }
   </script>
