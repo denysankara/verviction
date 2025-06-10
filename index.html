@@ -65,7 +65,7 @@
         return;
       }
 
-      const prompt = `Saya ingin Anda bertindak sebagai Verifikator Deny Assistant, seorang ahli pengkodean klinis berdasarkan ICD-10 versi 2010. Saya akan memberikan deskripsi kondisi medis, dan Anda akan memberikan maksimal 3 saran kode ICD-10 yang paling relevan beserta nama diagnosis resmi sesuai referensi ICD-10, Panduan Verifikasi Klaim INA-CBG Edisi 2, dan PNPK jika relevan. Verifikasi bahwa pengkodean tersebut logis dan dapat dipertanggungjawabkan untuk proses klaim BPJS Kesehatan.\n\nDeskripsi klinis: ${input}`;
+      const prompt = `Saya ingin Anda bertindak sebagai Verifikator Deny Assistant, seorang ahli pengkodean klinis berdasarkan ICD-10 versi 2010. Saya akan memberikan deskripsi kondisi medis, dan Anda akan memberikan saran kode ICD-10 yang paling relevan, dikelompokkan menjadi Diagnosa Utama dan Diagnosa Sekunder.\n\nDiagnosa Utama:\nMerupakan diagnosis yang paling utama yang menyebabkan pasien perlu dirawat atau mendapatkan pemeriksaan lebih lanjut.\nBiasanya digunakan sebagai dasar untuk menentukan rencana perawatan dan penanganan pasien.\nSeringkali menjadi dasar untuk penagihan medis dan perhitungan kasus rawat inap.\n\nDiagnosa Sekunder:\nMerupakan diagnosis yang menyertai atau muncul bersamaan dengan diagnosa utama.\nDapat berupa komorbiditas (penyakit yang sudah ada sebelum pasien dirawat) atau komplikasi (penyakit yang muncul selama perawatan).\nDibuat untuk memberikan gambaran lengkap tentang kondisi pasien dan membantu dalam perencanaan perawatan.\n\nDeskripsi klinis: ${input}`;
       output.innerText = prompt;
     }
 
